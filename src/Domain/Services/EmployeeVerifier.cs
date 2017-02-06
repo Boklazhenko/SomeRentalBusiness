@@ -14,6 +14,7 @@ namespace Domain.Services
             _empRepository = empRepository;
         }
 
-        public bool IsExist(Employee emp) => _empRepository.All().All(e => e.FullName != emp.FullName);
+        public bool IsExist(Employee emp) 
+            => _empRepository.All().All(e => e.FullName != emp.FullName);
     }
 }
