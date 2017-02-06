@@ -7,37 +7,23 @@
 
     public class App
     {
-        private readonly IRepository<Bike> _bikeRepository;
         private readonly IBikeService _bikeService;
-        private readonly IRepository<Client> _clientRepository;
-        private readonly IRepository<Employee> _employeeRepository;
-
-
+        private readonly IEmployeeService _empService;
 
         public App(
-            IRepository<Client> clientRepository,
-            IRepository<Employee> employeeRepository,
-            IRepository<Bike> bikeRepository,
-            IBikeService bikeService)
+            IBikeService bikeService, IEmployeeService empService)
         {
-            _clientRepository = clientRepository;
-            _employeeRepository = employeeRepository;
-            _bikeRepository = bikeRepository;
             _bikeService = bikeService;
-
+            _empService = empService;
         }
 
+        public void AddBike(string name, decimal hourCost) => _bikeService.AddBike(name, hourCost);
 
+        public IEnumerable<Bike> GetBikes() => _bikeService.GetAllBikes();
 
-        public void AddBike(string name, decimal hourCost)
-        {
-            _bikeService.AddBike(name, hourCost);
-            
-        }
+        public void AddEmployee(string surname, string firstName, string patronymic)
+            => _empService.AddEmployee(surname, firstName, patronymic);
 
-        public IEnumerable<Bike> GetBikes()
-        {
-            return _bikeRepository.All();
-        }
+        public IEnumerable<Employee> GetEmployees() => _empService.GetAllEmployees();
     }
 }

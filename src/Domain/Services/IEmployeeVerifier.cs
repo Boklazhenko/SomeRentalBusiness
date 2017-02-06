@@ -5,7 +5,7 @@ using Domain.Entities;
 
 namespace Domain.Services
 {
-    interface IEmployeeVerifier
+    public interface IEmployeeVerifier
     {
         bool IsExist(Employee emp);
     }

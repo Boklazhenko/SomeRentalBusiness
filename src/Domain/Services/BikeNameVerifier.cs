@@ -8,14 +8,10 @@
     {
         private readonly IRepository<Bike> _repository;
 
-
-
         public BikeNameVerifier(IRepository<Bike> repository)
         {
             _repository = repository;
         }
-
-
 
         public bool IsFree(string name)
         {

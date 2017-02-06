@@ -1,6 +1,7 @@
 ﻿namespace Domain.Services
 {
     using System;
+    using System.Collections.Generic;
     using Entities;
     using Repositories;
 
@@ -9,8 +10,6 @@
         private readonly IRepository<Bike> _repository;
         private readonly IBikeNameVerifier _bikeNameVerifier;
 
-
-        
         public BikeService(IRepository<Bike> repository, IBikeNameVerifier bikeNameVerifier)
         {
             if (repository == null)
@@ -48,5 +47,7 @@
 
             bike.Rename(name);
         }
+
+        public IEnumerable<Bike> GetAllBikes() => _repository.All();
     }
 }

@@ -5,7 +5,7 @@ using Domain.Repositories;
 
 namespace Domain.Services
 {
-    class EmployeeVerifier : IEmployeeVerifier
+    public class EmployeeVerifier : IEmployeeVerifier
     {
         private readonly IRepository<Employee> _empRepository;
 

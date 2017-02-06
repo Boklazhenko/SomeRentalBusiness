@@ -9,5 +9,6 @@
         void Add(TEntity entity);
 
         IEnumerable<TEntity> All();
+
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Domain.Services
+﻿using System.Collections.Generic;
+
+namespace Domain.Services
 {
     using Entities;
 
@@ -7,5 +9,7 @@
         void AddBike(string name, decimal hourCost);
 
         void Rename(Bike bike, string name);
+
+        IEnumerable<Bike> GetAllBikes();
     }
 }

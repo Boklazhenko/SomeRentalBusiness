@@ -1,5 +1,8 @@
-﻿namespace Domain.Repositories
+﻿using System.Linq;
+
+namespace Domain.Repositories
 {
+    using System;
     using System.Collections.Generic;
     using Entities;
 
@@ -7,8 +10,6 @@
         where TEntity : IEntity
     {
         private readonly List<TEntity> _list = new List<TEntity>();
-
-
 
         public void Add(TEntity entity)
         {
