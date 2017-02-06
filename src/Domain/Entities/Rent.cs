@@ -22,6 +22,7 @@
             Bike = bike;
             Deposit = deposit;
             HourCost = bike.HourCost;
+            bike.Take();
         }
 
 
@@ -61,8 +62,7 @@
             EndedAt = DateTime.UtcNow;
             EndRentPoint = rentPoint;
             EndRentPoint.PutMoney(Sum.Value);
-            Bike.Return();
-            Bike.MoveTo(EndRentPoint);
+            Bike.Return(EndRentPoint);
             EndRentPoint.ReturnDeposit(Deposit);
         }
     }

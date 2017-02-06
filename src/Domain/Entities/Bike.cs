@@ -65,14 +65,18 @@
                 throw new InvalidOperationException("Bike is not free");
 
             IsFree = false;
+            RentPoint.RemoveBike(this);
+            RentPoint = null;
         }
 
-        protected internal void Return()
+        protected internal void Return(RentPoint endRentPoint)
         {
             if (IsFree)
                 throw new InvalidOperationException("Bike is free");
 
             IsFree = true;
+            RentPoint = endRentPoint;
+            RentPoint.AddBike(this);
         }
     }
 }

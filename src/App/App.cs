@@ -32,6 +32,7 @@
         public void AddBike(string name, decimal hourCost)
         {
             _bikeService.AddBike(name, hourCost);
+            
         }
 
         public IEnumerable<Bike> GetBikes()
