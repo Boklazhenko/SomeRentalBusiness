@@ -1,4 +1,6 @@
-﻿namespace Domain.Services
+﻿using System.Collections.Generic;
+
+namespace Domain.Services
 {
     using Entities;
     using Entities.Deposits;
@@ -8,5 +10,7 @@
         void Take(Client client, Bike bike, Deposit deposit);
 
         void Return(Bike bike, RentPoint rentPoint);
+
+        IEnumerable<Rent> GetAllRents();
     }
 }

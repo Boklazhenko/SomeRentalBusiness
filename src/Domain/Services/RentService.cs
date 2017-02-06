@@ -1,6 +1,7 @@
 ﻿namespace Domain.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Entities;
     using Entities.Deposits;
@@ -14,7 +15,7 @@
 
 
         public RentService(
-            IDepositCalculator depositCalculator, 
+            IDepositCalculator depositCalculator,
             IRepository<Rent> rentRepository)
         {
             if (depositCalculator == null)
@@ -55,8 +56,17 @@
                     throw new InvalidOperationException("Deposit sum is not enough");
             }
 
-            bike.RentPoint.PutDeposit(deposit);
-            
+            switch (deposit.Type)
+            {
+                case DepositTypes.Money:
+                    bike.RentPoint.CashRegister.PutMoney(((MoneyDeposit)deposit).Sum);
+                    break;
+                case DepositTypes.Passport:
+                    bike.RentPoint.SafetyDepositBox.PutPassport((PassportDeposit)deposit);
+                    break;
+                default: throw new NotImplementedException("Not implemented this deposit type!");
+            }
+
             Rent rent = new Rent(client, bike, deposit);
 
             _rentRepository.Add(rent);
@@ -80,5 +90,8 @@
 
             rent.End(rentPoint);
         }
+
+        public IEnumerable<Rent> GetAllRents()
+            => _rentRepository.All();
     }
 }

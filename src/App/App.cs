@@ -49,10 +49,25 @@ namespace App
         public void AddClient(string surname, string firstName, string patronymic)
             => _clientService.AddClient(surname, firstName, patronymic);
 
+        public IEnumerable<Client> GetClients()
+            => _clientService.GetAllClients();
+
         public void StartRent(Client client, Bike bike, Deposit deposit)
             => _rentService.Take(client, bike, deposit);
 
         public void EndRent(Bike bike, RentPoint rentPoint)
             => _rentService.Return(bike, rentPoint);
+
+        public void RenameBike(Bike bike, string newName)
+            => _bikeService.Rename(bike, newName);
+
+        public void TakeMoney(RentPoint rentPoint, decimal money)
+            => rentPoint.CashRegister.TakeMoney(money);
+
+        public void PutMoney(RentPoint rentPoint, decimal money)
+            => rentPoint.CashRegister.PutMoney(money);
+
+        public IEnumerable<Rent> GetAllRents()
+            => _rentService.GetAllRents();
     }
 }

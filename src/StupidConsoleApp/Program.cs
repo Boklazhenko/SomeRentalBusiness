@@ -1,4 +1,11 @@
-﻿namespace StupidConsoleApp
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using Domain.Entities.Deposits;
+
+namespace StupidConsoleApp
 {
     using App;
     using Domain.Entities;
@@ -17,11 +24,33 @@
             App app = container.Resolve<App>();
 
             app.AddBike("Кама", 50);
-            app.AddBike("Кама", 100);
-        }
+            app.AddBike("Урал" , 100);
+            app.AddBike("Олимпик", 25);
 
-        private void Reg()
-        {
+            app.AddEmployee("Yaev", "Ya", "Yaevich");
+            
+            Employee ya = app.GetEmployees().FirstOrDefault();
+            app.AddRentPoint(ya, 1000);
+            RentPoint rentPoint = app.GetRentPoints().FirstOrDefault();
+
+            Bike kama = app.GetBikes().FirstOrDefault(b => b.Name == "Кама");
+            app.PlaceBikeIntoRentPoint(kama, rentPoint);
+
+            app.AddClient("Tiev", "Ti", "Tievich");
+            Client client = app.GetClients().FirstOrDefault();
+            Console.WriteLine(rentPoint.CashRegister.Money);
+            app.StartRent(client, kama, new MoneyDeposit(6000));
+            Console.WriteLine(rentPoint.CashRegister.Money);
+
+            app.EndRent(kama, rentPoint);
+            Console.WriteLine(rentPoint.CashRegister.Money);
+
+            IEnumerable<Rent> rents = app.GetAllRents();
+            foreach (var rent in rents)
+            {
+                Console.WriteLine(rent.StartRentPoint.Employee.FullName);
+            }
+            Console.ReadKey();
         }
 
         class MyFirstModule : Module

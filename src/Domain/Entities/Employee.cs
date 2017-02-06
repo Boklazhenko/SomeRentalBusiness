@@ -4,7 +4,7 @@
 
     public class Employee : IEntity
     {
-        public Employee(string surname, string firstname, string patronymic)
+        protected internal Employee(string surname, string firstname, string patronymic)
         {
             if (string.IsNullOrWhiteSpace(surname))
                 throw new ArgumentNullException(nameof(surname));

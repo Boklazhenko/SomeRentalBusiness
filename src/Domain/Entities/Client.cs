@@ -4,7 +4,7 @@
 
     public class Client : IEntity
     {
-        public Client(string surname, string firstname, string patronymic)
+        protected internal Client(string surname, string firstname, string patronymic)
         {
             if (string.IsNullOrWhiteSpace(surname))
                 throw new ArgumentNullException(nameof(surname));

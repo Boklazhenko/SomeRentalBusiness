@@ -25,8 +25,6 @@
             bike.Take();
         }
 
-
-
         public readonly RentPoint StartRentPoint;
 
         public readonly DateTime StartedAt;
@@ -34,12 +32,12 @@
         public RentPoint EndRentPoint { get; protected set; }
 
         public DateTime? EndedAt { get; protected set; }
-        
+
         public bool IsEnded => EndedAt.HasValue;
 
         // TODO Сделать нормальный читаемый геттер
         public decimal? Sum => IsEnded
-            ? (decimal?) Math.Round(Math.Ceiling((EndedAt.Value - StartedAt).TotalHours) * (double) HourCost, 2)
+            ? (decimal?)Math.Round(Math.Ceiling((EndedAt.Value - StartedAt).TotalHours) * (double)HourCost, 2)
             : null;
 
         public readonly Client Client;
@@ -61,9 +59,12 @@
 
             EndedAt = DateTime.UtcNow;
             EndRentPoint = rentPoint;
-            EndRentPoint.PutMoney(Sum.Value);
+            EndRentPoint.CashRegister.PutMoney(Sum.Value);
             Bike.Return(EndRentPoint);
-            EndRentPoint.ReturnDeposit(Deposit);
+            if (Deposit is PassportDeposit)
+                EndRentPoint.SafetyDepositBox.ReturnPassport((PassportDeposit)Deposit);
+            if (Deposit is MoneyDeposit)
+                EndRentPoint.CashRegister.TakeMoney(((MoneyDeposit)Deposit).Sum);
         }
     }
 }
