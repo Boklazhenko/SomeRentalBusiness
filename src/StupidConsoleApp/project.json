@@ -6,6 +6,7 @@
 
   "dependencies": {
     "App": "1.0.0-*",
+    "Autofac": "4.3.0",
     "Domain": "1.0.0-*",
     "Microsoft.NETCore.App": {
       "type": "platform",

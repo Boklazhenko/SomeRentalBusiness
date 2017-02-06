@@ -1,5 +1,4 @@
 ﻿using Domain.Entities.Deposits;
-
 namespace App
 {
     using System.Collections.Generic;
