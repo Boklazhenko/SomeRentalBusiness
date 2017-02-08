@@ -23,13 +23,11 @@ namespace Domain.Objects
         public CashRegister(decimal money)
             : this()
         {
-
             Money = money;
         }
 
         public CashRegister()
         {
-
         }
 
         public void PutMoney(decimal money)

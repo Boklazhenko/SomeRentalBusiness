@@ -1,4 +1,6 @@
-﻿namespace Domain.Services
+﻿using Domain.Factories;
+
+namespace Domain.Services
 {
     using System;
     using System.Collections.Generic;
@@ -11,12 +13,12 @@
     {
         private readonly IDepositCalculator _depositCalculator;
         private readonly IRepository<Rent> _rentRepository;
-
-
+        private readonly IRentSumCalculatorFactory _rentSumCalculatorFactory;
 
         public RentService(
             IDepositCalculator depositCalculator,
-            IRepository<Rent> rentRepository)
+            IRepository<Rent> rentRepository,
+            IRentSumCalculatorFactory rentSumCalculatorFactory)
         {
             if (depositCalculator == null)
                 throw new ArgumentNullException(nameof(depositCalculator));
@@ -26,6 +28,7 @@
 
             _depositCalculator = depositCalculator;
             _rentRepository = rentRepository;
+            _rentSumCalculatorFactory = rentSumCalculatorFactory;
         }
 
 
@@ -67,7 +70,7 @@
                 default: throw new NotImplementedException("Not implemented this deposit type!");
             }
 
-            Rent rent = new Rent(client, bike, deposit);
+            Rent rent = new Rent(client, bike, deposit, _rentSumCalculatorFactory);
 
             _rentRepository.Add(rent);
         }

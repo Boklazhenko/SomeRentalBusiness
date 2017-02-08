@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using Autofac.Builder;
 using Domain.Entities.Deposits;
+using Domain.Factories;
 
 namespace StupidConsoleApp
 {
@@ -24,11 +26,11 @@ namespace StupidConsoleApp
             App app = container.Resolve<App>();
 
             app.AddBike("Кама", 50);
-            app.AddBike("Урал" , 100);
+            app.AddBike("Урал", 100);
             app.AddBike("Олимпик", 25);
 
             app.AddEmployee("Yaev", "Ya", "Yaevich");
-            
+
             Employee ya = app.GetEmployees().FirstOrDefault();
             app.AddRentPoint(ya, 1000);
             RentPoint rentPoint = app.GetRentPoints().FirstOrDefault();
@@ -69,6 +71,8 @@ namespace StupidConsoleApp
                 builder.RegisterType<BikeNameVerifier>().As<IBikeNameVerifier>();
                 builder.RegisterType<EmployeeVerifier>().As<IEmployeeVerifier>();
                 builder.RegisterType<DepositCalculator>().As<IDepositCalculator>();
+
+                builder.RegisterType<RentSumCalculatorFactory>().As<IRentSumCalculatorFactory>();
 
                 builder.RegisterType<App>().AsSelf();
             }
