@@ -1,11 +1,14 @@
-﻿namespace Domain.Entities
+﻿using Domain.Services;
+
+namespace Domain.Entities
 {
     using System;
     using Deposits;
+    using Factories;
 
     public class Rent : IEntity
     {
-        protected internal Rent(Client client, Bike bike, Deposit deposit)
+        protected internal Rent(Client client, Bike bike, Deposit deposit, IRentSumCalculatorFactory rentSumCalculatorFactory)
         {
             if (client == null)
                 throw new ArgumentNullException(nameof(client));
@@ -23,7 +26,10 @@
             Deposit = deposit;
             HourCost = bike.HourCost;
             bike.Take();
+            _rentSumCalculatorFactory = rentSumCalculatorFactory;
         }
+
+        private readonly IRentSumCalculatorFactory _rentSumCalculatorFactory;
 
         public readonly RentPoint StartRentPoint;
 
@@ -36,9 +42,7 @@
         public bool IsEnded => EndedAt.HasValue;
 
         // TODO Сделать нормальный читаемый геттер
-        public decimal? Sum => IsEnded
-            ? (decimal?)Math.Round(Math.Ceiling((EndedAt.Value - StartedAt).TotalHours) * (double)HourCost, 2)
-            : null;
+        public decimal? Sum { get; protected set; }
 
         public readonly Client Client;
 
@@ -47,7 +51,6 @@
         public readonly Deposit Deposit;
 
         public readonly decimal HourCost;
-
 
 
         protected internal void End(RentPoint rentPoint)
@@ -59,6 +62,9 @@
 
             EndedAt = DateTime.UtcNow;
             EndRentPoint = rentPoint;
+            int hoursCount = (int)Math.Ceiling((EndedAt.Value - StartedAt).TotalHours);
+            RentSumCalculator calc = _rentSumCalculatorFactory.CreateRentSumCalculator(HourCost, hoursCount);
+            Sum = calc.Calculate();
             EndRentPoint.CashRegister.PutMoney(Sum.Value);
             Bike.Return(EndRentPoint);
             if (Deposit is PassportDeposit)
