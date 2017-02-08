@@ -41,6 +41,10 @@ namespace Domain.Entities
 
         public bool IsEnded => EndedAt.HasValue;
 
+<<<<<<< HEAD
+=======
+        // TODO Сделать нормальный читаемый геттер
+>>>>>>> 5f0bf58ae503e794d731d0e5f5880652c555d74d
         public decimal? Sum { get; protected set; }
 
         public readonly Client Client;
