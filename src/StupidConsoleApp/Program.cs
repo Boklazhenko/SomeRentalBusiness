@@ -39,9 +39,13 @@ namespace StupidConsoleApp
             app.PlaceBikeIntoRentPoint(kama, rentPoint);
 
             app.AddClient("Tiev", "Ti", "Tievich");
-            Client client = app.GetClients().FirstOrDefault();
+            app.AddClient("1", "2", "3");
+            Client client = app.GetClients().FirstOrDefault(c => c.FirstName == "Ti");
+            Client client2 = app.GetClients().FirstOrDefault(c => c.FullName == "1 2 3");
             Console.WriteLine(rentPoint.CashRegister.Money);
-            app.StartRent(client, kama, new MoneyDeposit(6000));
+            app.ReserveBike(kama, client, 3);
+            app.RemoveReservation(kama, client);
+            app.StartRent(client2, kama, new MoneyDeposit(6000));
             Console.WriteLine(rentPoint.CashRegister.Money);
 
             app.EndRent(kama, rentPoint);
@@ -65,6 +69,7 @@ namespace StupidConsoleApp
                 builder.RegisterType<ClientService>().As<IClientService>();
                 builder.RegisterType<RentPointService>().As<IRentPointService>();
                 builder.RegisterType<BikeService>().As<IBikeService>();
+                builder.RegisterType<ReservationService>().As<IReservationService>().SingleInstance();
 
                 builder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>)).SingleInstance();
 

@@ -13,19 +13,22 @@ namespace App
         private readonly IRentPointService _rentPointService;
         private readonly IClientService _clientService;
         private readonly IRentService _rentService;
+        private readonly IReservationService _reservationService;
 
         public App(
             IBikeService bikeService,
             IEmployeeService empService,
             IRentPointService rentPointService,
             IClientService clientService,
-            IRentService rentService)
+            IRentService rentService,
+            IReservationService reservationService)
         {
             _bikeService = bikeService;
             _empService = empService;
             _rentPointService = rentPointService;
             _clientService = clientService;
             _rentService = rentService;
+            _reservationService = reservationService;
         }
 
         public void AddBike(string name, decimal hourCost) => _bikeService.AddBike(name, hourCost);
@@ -69,5 +72,11 @@ namespace App
 
         public IEnumerable<Rent> GetAllRents()
             => _rentService.GetAllRents();
+
+        public void ReserveBike(Bike bike, Client client, int hoursCount)
+            => _reservationService.ReserveBike(bike, client, hoursCount);
+
+        public void RemoveReservation(Bike bike, Client client)
+            => _reservationService.RemoveReservation(bike, client);
     }
 }

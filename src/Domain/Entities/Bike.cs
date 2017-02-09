@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities
+﻿using Domain.Entities.Deposits;
+
+namespace Domain.Entities
 {
     using System;
 
@@ -8,20 +10,16 @@
         {
             Rename(name);
             ChangeHourCost(hourCost);
-            IsFree = true;
+            Status = BikeStatus.Free;
         }
-
-
 
         public string Name { get; protected set; }
 
         public decimal HourCost { get; protected set; }
 
-        public bool IsFree { get; protected set; }
+        public BikeStatus Status { get; protected set; }
 
         public RentPoint RentPoint { get; protected set; }
-
-        
 
         protected internal void Rename(string name)
         {
@@ -41,7 +39,7 @@
 
         public void MoveTo(RentPoint rentPoint)
         {
-            if (!IsFree)
+            if (Status == BikeStatus.Rental)
                 throw new InvalidOperationException("Bike is not free");
 
             if (rentPoint == null)
@@ -57,26 +55,41 @@
             RentPoint = rentPoint;
         }
 
-
-
         protected internal void Take()
         {
-            if (!IsFree)
+            if (Status == BikeStatus.Rental)
                 throw new InvalidOperationException("Bike is not free");
+            if (Status == BikeStatus.Broken)
+                throw new InvalidOperationException("This bike broken");
 
-            IsFree = false;
+            Status = BikeStatus.Rental;
             RentPoint.RemoveBike(this);
             RentPoint = null;
         }
 
         protected internal void Return(RentPoint endRentPoint)
         {
-            if (IsFree)
+            if (Status == BikeStatus.Free || Status == BikeStatus.Reserved)
                 throw new InvalidOperationException("Bike is free");
 
-            IsFree = true;
+            if (Status != BikeStatus.Broken)
+                Status = BikeStatus.Free;
             RentPoint = endRentPoint;
             RentPoint.AddBike(this);
+        }
+
+        protected internal void Reserve()
+        {
+            if (Status != BikeStatus.Free)
+                throw new InvalidOperationException("This bike is not to be reserved");
+            Status = BikeStatus.Reserved;
+        }
+
+        protected internal void UnReserve()
+        {
+            if(Status != BikeStatus.Reserved)
+                throw new InvalidOperationException("This Bike is not reserved");
+            Status = BikeStatus.Free;
         }
     }
 }

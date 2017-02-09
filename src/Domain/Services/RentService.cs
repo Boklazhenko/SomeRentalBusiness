@@ -14,11 +14,13 @@ namespace Domain.Services
         private readonly IDepositCalculator _depositCalculator;
         private readonly IRepository<Rent> _rentRepository;
         private readonly IRentSumCalculatorFactory _rentSumCalculatorFactory;
+        private readonly IReservationService _reservationService;
 
         public RentService(
             IDepositCalculator depositCalculator,
             IRepository<Rent> rentRepository,
-            IRentSumCalculatorFactory rentSumCalculatorFactory)
+            IRentSumCalculatorFactory rentSumCalculatorFactory,
+            IReservationService reservationService)
         {
             if (depositCalculator == null)
                 throw new ArgumentNullException(nameof(depositCalculator));
@@ -29,6 +31,7 @@ namespace Domain.Services
             _depositCalculator = depositCalculator;
             _rentRepository = rentRepository;
             _rentSumCalculatorFactory = rentSumCalculatorFactory;
+            _reservationService = reservationService;
         }
 
 
@@ -47,7 +50,7 @@ namespace Domain.Services
             if (bike.RentPoint == null)
                 throw new InvalidOperationException("Bike is not on rent point");
 
-            if (!bike.IsFree)
+            if (bike.Status != BikeStatus.Free && !_reservationService.IsReservedForClient(bike, client)) 
                 throw new InvalidOperationException("Bike is not free");
 
 

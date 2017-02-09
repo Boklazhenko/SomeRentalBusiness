@@ -22,8 +22,6 @@
             _bikeNameVerifier = bikeNameVerifier;
         }
 
-
-
         public void AddBike(string name, decimal hourCost)
         {
             if (!_bikeNameVerifier.IsFree(name))
