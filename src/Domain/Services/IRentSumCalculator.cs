@@ -9,6 +9,8 @@ namespace Domain.Services
     {
         decimal Calculate();
 
-        decimal Calcultate(Func<decimal, int, decimal> calculationFunc);
+        decimal Calculate(decimal hoursCost, int hoursCount);
+
+        decimal Calculate(Func<decimal, int, decimal> calculationFunc);
     }
 }

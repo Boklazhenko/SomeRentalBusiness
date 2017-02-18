@@ -1,5 +1,4 @@
-﻿using Domain.Factories;
-
+﻿
 namespace Domain.Services
 {
     using System;
@@ -13,25 +12,28 @@ namespace Domain.Services
     {
         private readonly IDepositCalculator _depositCalculator;
         private readonly IRepository<Rent> _rentRepository;
-        private readonly IRentSumCalculatorFactory _rentSumCalculatorFactory;
         private readonly IReservationService _reservationService;
+        private readonly IRentSumCalculator _rentSumCalculator;
 
         public RentService(
             IDepositCalculator depositCalculator,
             IRepository<Rent> rentRepository,
-            IRentSumCalculatorFactory rentSumCalculatorFactory,
-            IReservationService reservationService)
+            IReservationService reservationService, 
+            IRentSumCalculator rentSumCalculator)
         {
             if (depositCalculator == null)
                 throw new ArgumentNullException(nameof(depositCalculator));
-
             if (rentRepository == null)
                 throw new ArgumentNullException(nameof(rentRepository));
+            if (reservationService == null)
+                throw new ArgumentNullException(nameof(reservationService));
+            if (rentSumCalculator == null)
+                throw new ArgumentNullException(nameof(rentSumCalculator));
 
             _depositCalculator = depositCalculator;
             _rentRepository = rentRepository;
-            _rentSumCalculatorFactory = rentSumCalculatorFactory;
             _reservationService = reservationService;
+            _rentSumCalculator = rentSumCalculator;
         }
 
 
@@ -50,7 +52,7 @@ namespace Domain.Services
             if (bike.RentPoint == null)
                 throw new InvalidOperationException("Bike is not on rent point");
 
-            if (bike.Status != BikeStatus.Free && !_reservationService.IsReservedForClient(bike, client)) 
+            if (!bike.IsFree && !_reservationService.IsReservedForClient(bike, client)) 
                 throw new InvalidOperationException("Bike is not free");
 
 
@@ -73,7 +75,7 @@ namespace Domain.Services
                 default: throw new NotImplementedException("Not implemented this deposit type!");
             }
 
-            Rent rent = new Rent(client, bike, deposit, _rentSumCalculatorFactory);
+            Rent rent = new Rent(client, bike, deposit);
 
             _rentRepository.Add(rent);
         }
@@ -94,7 +96,9 @@ namespace Domain.Services
             if (rent == null)
                 throw new InvalidOperationException("Rent not found");
 
-            rent.End(rentPoint);
+            int hoursCount = (int) Math.Ceiling((DateTime.UtcNow - rent.StartedAt).TotalHours);
+            decimal rentSum = _rentSumCalculator.Calculate(rent.HourCost, hoursCount);
+            rent.End(rentPoint, rentSum);
         }
 
         public IEnumerable<Rent> GetAllRents()

@@ -1,4 +1,9 @@
-﻿using Domain.Entities.Deposits;
+﻿using Domain.Entities.Commands;
+using Domain.Entities.Commands.CommandsContexts;
+using Domain.Entities.Deposits;
+using Domain.Entities.Queries.QueriesCriterions;
+using Domain.Objects;
+
 namespace App
 {
     using System.Collections.Generic;
@@ -8,61 +13,101 @@ namespace App
 
     public class App
     {
-        private readonly IBikeService _bikeService;
-        private readonly IEmployeeService _empService;
-        private readonly IRentPointService _rentPointService;
-        private readonly IClientService _clientService;
-        private readonly IRentService _rentService;
-        private readonly IReservationService _reservationService;
+        private readonly ICommandBuilder _commandBuilder;
+        private readonly IQueryBuilder _queryBuilder;
 
         public App(
-            IBikeService bikeService,
-            IEmployeeService empService,
-            IRentPointService rentPointService,
-            IClientService clientService,
-            IRentService rentService,
-            IReservationService reservationService)
+            ICommandBuilder commandBuilder,
+            IQueryBuilder queryBuilder)
         {
-            _bikeService = bikeService;
-            _empService = empService;
-            _rentPointService = rentPointService;
-            _clientService = clientService;
-            _rentService = rentService;
-            _reservationService = reservationService;
+            _commandBuilder = commandBuilder;
+            _queryBuilder = queryBuilder;
         }
 
-        public void AddBike(string name, decimal hourCost) => _bikeService.AddBike(name, hourCost);
+        public void AddBike(string name, decimal hourCost)
+            => _commandBuilder.Execute(new AddBikeCommandContext
+            {
+                BikeName = name,
+                HourCost = hourCost
+            });
 
-        public IEnumerable<Bike> GetBikes() => _bikeService.GetAllBikes();
+        public Bike GetBike(string name)
+            => _queryBuilder.For<Bike>().With(new BikeNameCriterion
+            {
+                BikeName = name
+            });
+
+        public IEnumerable<Bike> GetBikes()
+            => _queryBuilder.For<IEnumerable<Bike>>().With(new AllEntitiesCriterion());
+
+        public IEnumerable<Bike> GetBikesOnRentPoint(RentPoint rentPoint)
+            => _queryBuilder.For<IEnumerable<Bike>>().With(new RentPointCriterion
+            {
+                RentPoint = rentPoint
+            });
+
+        public Rent GetOpenRent(Bike bike)
+            => _queryBuilder.For<Rent>().With(new BikeCriterion
+            {
+                Bike = bike
+            });
 
         public void AddEmployee(string surname, string firstName, string patronymic)
-            => _empService.AddEmployee(surname, firstName, patronymic);
+            => _commandBuilder.Execute(new AddEmployeeCommandContext
+            {
+                Surname = surname,
+                Name = firstName,
+                Patronymic = patronymic
+            });
 
-        public IEnumerable<Employee> GetEmployees() => _empService.GetAllEmployees();
+        public IEnumerable<Employee> GetEmployees()
+            => _queryBuilder.For<IEnumerable<Employee>>().With(new AllEntitiesCriterion());
 
         public void AddRentPoint(Employee employee, decimal money)
-            => _rentPointService.AddRentPoint(employee, money);
+            => _commandBuilder.Execute(new AddRentPointCommandContext
+            {
+                Employee = employee,
+                Money = money
+            });
 
         public IEnumerable<RentPoint> GetRentPoints()
-            => _rentPointService.GetAllRentPoints();
+            => _queryBuilder.For<IEnumerable<RentPoint>>().With(new AllEntitiesCriterion());
 
         public void PlaceBikeIntoRentPoint(Bike bike, RentPoint rentPoint)
             => bike.MoveTo(rentPoint);
 
         public void AddClient(string surname, string firstName, string patronymic)
-            => _clientService.AddClient(surname, firstName, patronymic);
+            => _commandBuilder.Execute(new AddClientCommandContext
+            {
+                Surname = surname,
+                Name = firstName,
+                Patronymic = patronymic
+            });
 
         public IEnumerable<Client> GetClients()
-            => _clientService.GetAllClients();
+            => _queryBuilder.For<IEnumerable<Client>>().With(new AllEntitiesCriterion());
 
         public void StartRent(Client client, Bike bike, Deposit deposit)
-            => _rentService.Take(client, bike, deposit);
+            => _commandBuilder.Execute(new StartRentCommandContext
+            {
+                Client = client,
+                Bike = bike,
+                Deposit = deposit
+            });
 
         public void EndRent(Bike bike, RentPoint rentPoint)
-            => _rentService.Return(bike, rentPoint);
+            => _commandBuilder.Execute(new EndRentCommandContext
+            {
+                Bike = bike,
+                RentPoint = rentPoint
+            });
 
         public void RenameBike(Bike bike, string newName)
-            => _bikeService.Rename(bike, newName);
+            => _commandBuilder.Execute(new RenameBikeCommandContext
+            {
+                Bike = bike,
+                NewName = newName
+            });
 
         public void TakeMoney(RentPoint rentPoint, decimal money)
             => rentPoint.CashRegister.TakeMoney(money);
@@ -71,12 +116,21 @@ namespace App
             => rentPoint.CashRegister.PutMoney(money);
 
         public IEnumerable<Rent> GetAllRents()
-            => _rentService.GetAllRents();
+            => _queryBuilder.For<IEnumerable<Rent>>().With(new AllEntitiesCriterion());
 
         public void ReserveBike(Bike bike, Client client, int hoursCount)
-            => _reservationService.ReserveBike(bike, client, hoursCount);
+            => _commandBuilder.Execute(new ReserveBikeCommandContext
+            {
+                Bike = bike,
+                Client = client,
+                HoursCount = hoursCount
+            });
 
         public void RemoveReservation(Bike bike, Client client)
-            => _reservationService.RemoveReservation(bike, client);
+            => _commandBuilder.Execute(new RemoveReservationCommandContext
+            {
+                Bike = bike,
+                Client = client
+            });
     }
 }

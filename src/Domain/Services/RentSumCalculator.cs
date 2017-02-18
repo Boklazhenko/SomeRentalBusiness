@@ -43,7 +43,14 @@ namespace Domain.Services
                 ? HoursCount * HourCost
                 : 2 * HourCost + (HoursCount - 2) * 0.8m * HourCost;
 
-        public decimal Calcultate(Func<decimal, int, decimal> calculationFunc)
+        public decimal Calculate(Func<decimal, int, decimal> calculationFunc)
             => calculationFunc(HourCost, HoursCount);
+
+        public decimal Calculate(decimal hoursCost, int hoursCount)
+        {
+            HourCost = hoursCost;
+            HoursCount = hoursCount;
+            return Calculate();
+        }
     }
 }

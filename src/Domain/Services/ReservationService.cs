@@ -17,7 +17,7 @@ namespace Domain.Services
             if (repository == null)
                 throw new ArgumentNullException(nameof(repository));
             _list = repository.All().ToList();
-            StartMonitoringReservations();
+           // StartMonitoringReservations();
         }
 
         public void ReserveBike(Bike bike, Client client, int hoursCount)
@@ -28,7 +28,7 @@ namespace Domain.Services
                 throw new ArgumentNullException(nameof(client));
             if (hoursCount < 1)
                 throw new InvalidOperationException("Do not reserve the bike less than an hour");
-            if (bike.Status != BikeStatus.Free)
+            if (!bike.IsFree)
                 throw new InvalidOperationException("This bike is not free");
             bike.Reserve();
             _list.Add(new Reservation(bike, client, hoursCount));
@@ -60,7 +60,7 @@ namespace Domain.Services
 
         private void CheckReservations(object obj)
         {
-            IEnumerable<Bike> removedBikes = _list.Where(r => r.EndDate <= DateTime.Now).Select(r => r.Bike);
+            IEnumerable<Bike> removedBikes = _list.Where(r => r.EndDate <= DateTime.Now).Select(r => r.Bike).ToList();
             removedBikes.ToList().ForEach(b => b.UnReserve());
             _list = _list.Where(r => r.EndDate >= DateTime.Now).ToList();
         }
