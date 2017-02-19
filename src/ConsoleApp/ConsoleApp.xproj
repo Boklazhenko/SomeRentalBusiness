@@ -7,8 +7,8 @@
 
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>42300cfc-e3a8-4459-9c3a-5e6273e6840a</ProjectGuid>
-    <RootNamespace>ConsoleApp</RootNamespace>
+    <ProjectGuid>f2929bba-4bdc-466d-b171-73b650fce066</ProjectGuid>
+    <RootNamespace>StupidConsoleApp</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
