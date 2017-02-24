@@ -57,7 +57,7 @@ namespace StupidConsoleApp
             Console.WriteLine($"{r.Deposit.Type} {r.StartedAt}");
             Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++");
             app.EndRent(kama, rentPoint);
-            Console.WriteLine(rentPoint.CashRegister.Money);
+            Console.WriteLine(rentPoint.ID);
 
             IEnumerable<Rent> rents = app.GetAllRents().ToList();
             foreach (var rent in rents)
@@ -68,7 +68,7 @@ namespace StupidConsoleApp
             IEnumerable<Bike> bikes = app.GetBikesOnRentPoint(rentPoint).ToList();
             foreach (Bike bike in bikes)
             {
-                Console.WriteLine(bike.Name);
+                Console.WriteLine(bike.ID);
             }
             container.Dispose();
             Console.ReadKey();
@@ -92,6 +92,7 @@ namespace StupidConsoleApp
                 builder.RegisterType<EmployeeVerifier>().As<IEmployeeVerifier>().SingleInstance();
                 builder.RegisterType<DepositCalculator>().As<IDepositCalculator>().SingleInstance();
                 builder.RegisterType<RentSumCalculator>().As<IRentSumCalculator>().SingleInstance();
+                builder.RegisterType<IDGenerator>().As<IIDGenerator>().SingleInstance();
 
                 builder.RegisterType<App>().AsSelf();
             }

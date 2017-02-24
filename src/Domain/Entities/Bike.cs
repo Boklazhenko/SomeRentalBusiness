@@ -4,7 +4,7 @@ namespace Domain.Entities
 {
     using System;
 
-    public class Bike : IEntity
+    public class Bike : Entity
     {
         protected internal Bike(string name, decimal hourCost)
         {

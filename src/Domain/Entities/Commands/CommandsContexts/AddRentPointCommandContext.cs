@@ -10,5 +10,6 @@ namespace Domain.Entities.Commands.CommandsContexts
     {
         public Employee Employee { get; set; }
         public decimal Money { get; set; }
+        public string Name { get; set; }
     }
 }

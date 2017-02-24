@@ -1,0 +1,29 @@
+﻿@using Domain.Entities
+@model IEnumerable<Domain.Entities.RentPoint>
+
+    @{
+        ViewBag.Title = "title";
+        Layout = "_Layout";
+    }
+<label style="padding: 20px">Добавить точку проката</label>
+<form asp-controller="RentPoint" asp-action="Add" method="post" style="padding: 40px; padding-top: 10px">
+    <label for="name">Имя</label>
+    <input id="name" type="text" name="name" />
+    <br />
+    <label for="money">Кол-во денег</label>
+    <input id="money" type="text" name="money"/>
+    <br/>
+    <label for="employeeSelect">Сотрудник</label>
+    <select id="employeeSelect" asp-items="@ViewBag.Employees" name="ID"></select>
+    <br/>
+    <input type="submit" value="Добавить"/>
+</form>
+<hr/>
+
+<ul style="padding: 40px">
+    @foreach (RentPoint rentPoint in Model)
+    {
+        <li>@rentPoint.ID. <a asp-controller="RentPoint" asp-action="Details" 
+                              asp-all-route-data='new Dictionary<string,string> {{ "ID", rentPoint.ID.ToString() }}'>@rentPoint.Name</a></li>
+    }     
+</ul>

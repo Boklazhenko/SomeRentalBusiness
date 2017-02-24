@@ -47,5 +47,10 @@
         }
 
         public IEnumerable<Bike> GetAllBikes() => _repository.All();
+
+        public Bike GetBikeByID(int id)
+        {
+            return _repository.Get(id);
+        }
     }
 }

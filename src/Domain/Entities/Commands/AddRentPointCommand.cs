@@ -19,7 +19,7 @@ namespace Domain.Entities.Commands
 
         public void Execute(AddRentPointCommandContext commandContex)
         {
-            _rentPointService.AddRentPoint(commandContex.Employee, commandContex.Money);
+            _rentPointService.AddRentPoint(commandContex.Employee, commandContex.Money, commandContex.Name);
         }
     }
 }

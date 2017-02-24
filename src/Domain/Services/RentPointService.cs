@@ -15,10 +15,15 @@ namespace Domain.Services
             _repository = repository;
         }
 
-        public void AddRentPoint(Employee emp, decimal money)
-            => _repository.Add(new RentPoint(emp, money));
+        public void AddRentPoint(Employee emp, decimal money, string name)
+            => _repository.Add(new RentPoint(emp, money, name));
 
         public IEnumerable<RentPoint> GetAllRentPoints()
             => _repository.All();
+
+        public RentPoint GetRentPoint(int ID)
+        {
+            return _repository.Get(ID);
+        }
     }
 }

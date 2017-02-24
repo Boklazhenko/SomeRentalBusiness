@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class Client : IEntity
+    public class Client : Entity
     {
         protected internal Client(string surname, string firstname, string patronymic)
         {
@@ -20,8 +20,6 @@
             Patronymic = patronymic;
         }
 
-
-        
         public readonly string Surname;
 
         public readonly string FirstName;

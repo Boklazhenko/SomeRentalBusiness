@@ -1,0 +1,27 @@
+﻿@using System.Threading.Tasks
+@using Domain.Entities
+@model System.Collections.Generic.IEnumerable<Domain.Entities.Bike>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+<label style="padding: 20px">Добавить велосипед</label>
+<form asp-controller="Bike" asp-action="Add" method="post" style="padding: 40px; padding-top: 10px">
+    <label for="name">Имя</label>
+    <input id="name" type="text" name="name" />
+    <br />
+    <label for="hourCost">Стоимость часа</label>
+    <input id="hourCost" type="text" name="hourCost" />
+    <br />
+    <input type="submit" value="Добавить" />
+</form>
+<hr />
+<br />
+<ul>
+    <b>Все велосипеды</b>
+    @foreach (Bike bike in Model)
+    {
+        <li>@bike.Name. Находится на точке: @bike.RentPoint?.Name</li>
+    }
+</ul>

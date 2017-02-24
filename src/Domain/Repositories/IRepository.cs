@@ -9,5 +9,7 @@
         void Add(TEntity entity);
 
         IEnumerable<TEntity> All();
+
+        TEntity Get(int ID);
     }
 }

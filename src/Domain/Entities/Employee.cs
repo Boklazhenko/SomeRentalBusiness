@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class Employee : IEntity
+    public class Employee : Entity
     {
         protected internal Employee(string surname, string firstname, string patronymic)
         {
@@ -20,8 +20,6 @@
             Patronymic = patronymic;
         }
 
-
-        
         public readonly string Surname;
 
         public readonly string FirstName;

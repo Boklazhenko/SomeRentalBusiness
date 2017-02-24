@@ -1,0 +1,31 @@
+﻿@using Domain.Entities
+@model Domain.Entities.RentPoint
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h3>Точка проката - @Model.Name</h3>
+<b>Сотрудник</b> - @Model.Employee.FullName
+<br />
+<b>Денег в кассе</b> - @Model.CashRegister.Money
+<br />
+<hr />
+<form asp-controller="RentPoint" asp-action="MoveBike" 
+      asp-all-route-data='new Dictionary<string,string> { {"rentpointID", Model.ID.ToString()}}'>
+    <b>Переместить велосипед на точку</b>
+    <br />
+    <select asp-items="@ViewBag.Bikes" name="bikeID"></select>
+    <br />
+    <input type="submit" value="Do iT!" />
+</form>
+<hr />
+<ul>
+    <b>Список велосипедов</b>
+    @foreach (Bike bike in Model.Bikes)
+    {
+        <li>@bike.Name</li>
+    }
+</ul>
+

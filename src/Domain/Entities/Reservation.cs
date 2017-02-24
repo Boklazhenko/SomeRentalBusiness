@@ -7,7 +7,7 @@ using Domain.Services;
 
 namespace Domain.Entities
 {
-    public class Reservation : IEntity
+    public class Reservation : Entity
     {
         public readonly Bike Bike;
         public readonly Client Client;

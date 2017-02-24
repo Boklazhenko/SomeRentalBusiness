@@ -8,7 +8,7 @@ namespace Domain.Entities
     using System.Linq;
     using Deposits;
 
-    public class RentPoint : IEntity
+    public class RentPoint : Entity
     {
         protected readonly IList<Bike> _bikes = new List<Bike>();
         public readonly CashRegister CashRegister;
@@ -16,7 +16,8 @@ namespace Domain.Entities
 
         protected internal RentPoint(
             Employee employee,
-            decimal money)
+            decimal money,
+            string name)
         {
             if (employee == null)
                 throw new ArgumentNullException(nameof(employee));
@@ -24,12 +25,14 @@ namespace Domain.Entities
                 throw new ArgumentOutOfRangeException(nameof(money));
 
             Employee = employee;
+            Name = name;
             CashRegister = new CashRegister(money);
             SafetyDepositBox = new SafetyDepositBox();
         }
 
         public readonly Employee Employee;
-        
+        public readonly string Name;
+
         public IEnumerable<Bike> Bikes => _bikes.AsEnumerable();
 
         public IEnumerable<PassportDeposit> PassportDeposits => SafetyDepositBox.GetAllPassports();

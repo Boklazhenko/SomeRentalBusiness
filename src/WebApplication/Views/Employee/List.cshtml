@@ -1,0 +1,28 @@
+﻿@using Domain.Entities
+@model IEnumerable<Domain.Entities.Employee>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+<label style="padding: 20px">Добавить сотрудника</label>
+<form asp-controller="Employee" asp-action="Add" method="post" style="padding: 40px; padding-top: 10px">
+    <label for="name">Имя</label>
+    <input id="name" type="text" name="name" />
+    <br />
+    <label for="surname">Фамилия</label>
+    <input id="surname" type="text" name="surname" />
+    <br />
+    <label for="patronymic">Отчество</label>
+    <input id="patronymic" type="text" name="patronymic"/>
+    <br />
+    <input type="submit" value="Добавить"/>
+</form>
+<hr />
+
+<ul style="padding: 40px">
+    @foreach (Employee emp in Model)
+    {
+        <li>@emp.FullName</li>
+    }
+</ul>

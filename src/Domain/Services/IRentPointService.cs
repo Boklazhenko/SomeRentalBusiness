@@ -7,8 +7,10 @@ namespace Domain.Services
 {
     public interface IRentPointService
     {
-        void AddRentPoint(Employee emp, decimal money);
+        void AddRentPoint(Employee emp, decimal money, string name);
 
         IEnumerable<RentPoint> GetAllRentPoints();
+
+        RentPoint GetRentPoint(int ID);
     }
 }

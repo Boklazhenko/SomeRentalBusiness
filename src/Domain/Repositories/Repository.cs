@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Domain.Services;
 
 namespace Domain.Repositories
 {
@@ -6,19 +7,31 @@ namespace Domain.Repositories
     using System.Collections.Generic;
     using Entities;
 
-    public class Repository<TEntity> : IRepository<TEntity> 
+    public class Repository<TEntity> : IRepository<TEntity>
         where TEntity : IEntity
     {
-        private readonly List<TEntity> _list = new List<TEntity>();
+        private readonly Dictionary<int, TEntity> _dictionary = new Dictionary<int, TEntity>();
+        private readonly IIDGenerator _idGenerator;
+
+        public Repository(IIDGenerator idGenerator)
+        {
+            _idGenerator = idGenerator;
+        }
 
         public void Add(TEntity entity)
         {
-            _list.Add(entity);
+            entity.ID = _idGenerator.Generate<TEntity>();
+            _dictionary[entity.ID] = entity;
         }
 
         public IEnumerable<TEntity> All()
         {
-            return _list;
+            return _dictionary.Select(p => p.Value);
+        }
+
+        public TEntity Get(int ID)
+        {
+            return _dictionary[ID];
         }
     }
 }

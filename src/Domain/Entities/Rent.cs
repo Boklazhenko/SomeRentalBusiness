@@ -5,7 +5,7 @@ namespace Domain.Entities
     using System;
     using Deposits;
 
-    public class Rent : IEntity
+    public class Rent : Entity
     {
         protected internal Rent(Client client, Bike bike, Deposit deposit)
         {
@@ -54,7 +54,7 @@ namespace Domain.Entities
                 throw new ArgumentNullException(nameof(rentPoint));
             if (IsEnded)
                 throw new InvalidOperationException("Rent is already ended");
-            if(rentSum < 0)
+            if (rentSum < 0)
                 throw new InvalidOperationException("The sum can not be less than 0");
 
             Sum = rentSum;
